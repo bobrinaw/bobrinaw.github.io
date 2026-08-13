@@ -35,7 +35,12 @@
             align-items: center;
         }
 
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--accent-color); text-decoration: none; }
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            color: var(--accent-color); 
+            text-decoration: none; 
+        }
         
         nav a {
             color: var(--text-color);
@@ -51,9 +56,9 @@
 
         section { margin-bottom: 4rem; padding-top: 2rem; }
 
-        h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #fff; }
-        h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #fff; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.5rem; color: #fff; }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #ffffff; }
+        h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #ffffff; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.5rem; color: #ffffff; }
         
         p { margin-bottom: 1rem; }
         ul { margin-bottom: 1rem; padding-left: 1.5rem; }
@@ -62,13 +67,16 @@
         .btn {
             display: inline-block;
             background-color: #238636;
-            color: #fff;
+            color: #ffffff;
             padding: 0.8rem 1.5rem;
             text-decoration: none;
             border-radius: 6px;
             font-weight: 500;
             margin-top: 1rem;
+            border: none;
+            cursor: pointer;
             transition: background-color 0.2s;
+            font-size: 1rem;
         }
 
         .btn:hover { background-color: #2ea043; }
@@ -101,18 +109,15 @@
             margin-top: 4rem;
         }
 
-        #color-profile {
-            /* Специфичный идентификатор для настройки стилей */
-            color: inherit;
-        }
-
         @media (max-width: 600px) {
             header { flex-direction: column; gap: 1rem; }
+            nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
             nav a { margin: 0 0.5rem; }
+            h1 { font-size: 2rem; }
         }
     </style>
 </head>
-<body id="color-profile">
+<body>
 
     <header>
         <a href="#" class="logo">VlessForU</a>
@@ -143,11 +148,9 @@
             
             <div class="card">
                 <h3>Ссылка для импорта:</h3>
-                <code style="display:block; background:#010409; padding:1rem; border-radius:6px; word-break: break-all; margin-bottom: 1rem;">
-                    https://vlessforu.github.io/sub/list.txt
-                </code>
+                <code id="sub-link" style="display:block; background:#010409; color: var(--text-color); padding:1rem; border-radius:6px; word-break: break-all; margin-bottom: 1rem;">https://sub.vlessfo.ru/vlessforu/working_configs.txt</code>
                 <p><strong>Инструкция для Happ:</strong> Откройте приложение -> Перейдите в раздел подписок -> Добавьте новый URL -> Нажмите "Обновить".</p>
-                <a href="#" class="btn">Скопировать ссылку</a>
+                <button onclick="copyToClipboard()" class="btn" id="copy-btn">Скопировать ссылку</button>
             </div>
         </section>
 
@@ -196,8 +199,23 @@
 
     <footer>
         <p>&copy; 2026 VlessForU. Все права защищены. Проект с открытым исходным кодом.</p>
-        <p>Размещено на GitHub Pages.</p>
     </footer>
 
+    <script>
+        function copyToClipboard() {
+            const linkText = document.getElementById("sub-link").innerText;
+            navigator.clipboard.writeText(linkText).then(() => {
+                const btn = document.getElementById("copy-btn");
+                btn.innerText = "Скопировано!";
+                btn.style.backgroundColor = "#2ea043";
+                setTimeout(() => {
+                    btn.innerText = "Скопировать ссылку";
+                    btn.style.backgroundColor = "#238636";
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка при копировании: ', err);
+            });
+        }
+    </script>
 </body>
 </html>
