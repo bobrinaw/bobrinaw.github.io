@@ -319,7 +319,6 @@
             <h1>Безопасная маршрутизация сетей</h1>
             <p><strong>VlessForU</strong> — автоматический агрегатор конфигураций VLESS и Xray для тестирования сетей и защиты личных данных в публичных Wi-Fi.</p>
             
-            <!-- Добавлен вызов функции вибрации при клике -->
             <a href="#configs" class="btn btn-cta" onclick="triggerVibration(40)">Подключиться</a>
 
             <div class="card" style="margin-top: 2.5rem;">
@@ -447,8 +446,8 @@
 
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).then(() => {
-                // Двойная вибрация (успех)
-                triggerVibration([30, 50, 30]);
+                // Две вибрации по 0.5с (500мс) и третий "тык" 0.2с (200мс), паузы по 100мс
+                triggerVibration([500, 100, 500, 100, 200]);
 
                 const btn = document.getElementById("copy-btn");
                 const originalText = btn.innerText;
@@ -469,8 +468,8 @@
         function addToApp(appName) {
             if (!checkbox.checked) return;
 
-            // Вибрация перед переходом в приложение
-            triggerVibration(50);
+            // Две вибрации по 0.5с (500мс) и третий "тык" 0.2с (200мс), паузы по 100мс
+            triggerVibration([500, 100, 500, 100, 200]);
 
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).catch(e => {});
