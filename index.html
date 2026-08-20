@@ -39,7 +39,31 @@
             position: relative;
         }
 
-        /* Фоновый блюр для красоты */
+        /* Анимированный градиентный фон (активируется после галочки) */
+        .bg-animated-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -2;
+            background: linear-gradient(120deg, #09090b, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15), #09090b);
+            background-size: 300% 300%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .bg-animated-overlay.active {
+            opacity: 1;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Фоновый блюр для красоты (статичный) */
         .bg-glow {
             position: absolute;
             top: -200px; left: 50%;
@@ -217,6 +241,7 @@
             border-radius: 100px;
             box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
             margin-top: 1rem;
+            display: inline-block;
         }
         
         .btn-cta:hover {
@@ -267,12 +292,14 @@
             h1 { font-size: 2.2rem; }
             .card { padding: 1.5rem; }
             .btn-group { grid-template-columns: 1fr; }
-            .btn-cta { width: 100%; margin-top: 1.5rem; }
+            .btn-cta { width: 100%; text-align: center; margin-top: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Новый анимированный фон -->
+    <div class="bg-animated-overlay" id="animated-bg"></div>
     <div class="bg-glow"></div>
 
     <header>
@@ -376,9 +403,10 @@
     </footer>
 
     <script>
-        // Логика чекбокса принятия правил
+        // Логика чекбокса принятия правил и анимации фона
         const checkbox = document.getElementById('accept-terms-cb');
         const subLink = document.getElementById('sub-link');
+        const animatedBg = document.getElementById('animated-bg');
         const btns = [
             document.getElementById('copy-btn'),
             document.getElementById('happ-btn'),
@@ -388,11 +416,14 @@
         checkbox.addEventListener('change', function() {
             const isAccepted = this.checked;
             
-            // Снимаем/вешаем блюр со ссылки
             if (isAccepted) {
+                // Снимаем блюр со ссылки и запускаем анимированный фон
                 subLink.classList.add('revealed');
+                animatedBg.classList.add('active');
             } else {
+                // Возвращаем блюр и убираем фон
                 subLink.classList.remove('revealed');
+                animatedBg.classList.remove('active');
             }
 
             // Активируем/блокируем кнопки
@@ -403,7 +434,7 @@
 
         // Функция копирования
         function copyToClipboard() {
-            if (!checkbox.checked) return; // Защита от вызова через консоль
+            if (!checkbox.checked) return;
 
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).then(() => {
@@ -427,7 +458,7 @@
             if (!checkbox.checked) return;
 
             const linkText = document.getElementById("sub-link").innerText;
-            navigator.clipboard.writeText(linkText).catch(e => {}); // Тихий бэкап в буфер
+            navigator.clipboard.writeText(linkText).catch(e => {});
             
             let appSchemeUrl = "";
             if (appName === 'Happ') {
