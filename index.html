@@ -208,6 +208,22 @@
         .btn-incy { background: var(--accent-incy); }
         .btn-incy:not(:disabled):hover { background: #6d28d9; box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
 
+        /* Главная кнопка CTA (Call to Action) */
+        .btn-cta {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: #fff;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 100px;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+            margin-top: 1rem;
+        }
+        
+        .btn-cta:hover {
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+
         /* Юридические тексты */
         .legal-text {
             font-size: 0.85rem;
@@ -251,6 +267,7 @@
             h1 { font-size: 2.2rem; }
             .card { padding: 1.5rem; }
             .btn-group { grid-template-columns: 1fr; }
+            .btn-cta { width: 100%; margin-top: 1.5rem; }
         }
     </style>
 </head>
@@ -274,7 +291,10 @@
         <section id="about" class="reveal">
             <h1>Безопасная маршрутизация сетей</h1>
             <p><strong>VlessForU</strong> — автоматический агрегатор конфигураций VLESS и Xray для тестирования сетей и защиты личных данных в публичных Wi-Fi.</p>
-            <div class="card" style="margin-top: 2rem;">
+            
+            <a href="#configs" class="btn btn-cta">Подключиться</a>
+
+            <div class="card" style="margin-top: 2.5rem;">
                 <h3>Как это работает?</h3>
                 <p>Наш алгоритм автоматически проверяет публичные узлы на доступность, измеряет скорость отклика и формирует готовые конфигурации для импорта в поддерживаемые клиенты (<strong>Happ</strong>, <strong>Incy</strong>, v2rayN, Nekobox).</p>
                 <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0;"><em>Внимание: Сервис не является средством обхода установленных законом ограничений доступа к информации.</em></p>
