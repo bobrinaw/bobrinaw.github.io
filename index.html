@@ -446,8 +446,8 @@
 
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).then(() => {
-                // Две вибрации по 0.5с (500мс) и третий "тык" 0.2с (200мс), паузы по 100мс
-                triggerVibration([500, 100, 500, 100, 200]);
+                // Легкий двойной клик и чуть более длинный третий
+                triggerVibration([50, 80, 50, 80, 150]);
 
                 const btn = document.getElementById("copy-btn");
                 const originalText = btn.innerText;
@@ -468,8 +468,8 @@
         function addToApp(appName) {
             if (!checkbox.checked) return;
 
-            // Две вибрации по 0.5с (500мс) и третий "тык" 0.2с (200мс), паузы по 100мс
-            triggerVibration([500, 100, 500, 100, 200]);
+            // Легкий двойной клик и чуть более длинный третий
+            triggerVibration([50, 80, 50, 80, 150]);
 
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).catch(e => {});
