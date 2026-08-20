@@ -298,7 +298,7 @@
 </head>
 <body>
 
-    <!-- Новый анимированный фон -->
+    <!-- Анимированный фон -->
     <div class="bg-animated-overlay" id="animated-bg"></div>
     <div class="bg-glow"></div>
 
@@ -319,7 +319,8 @@
             <h1>Безопасная маршрутизация сетей</h1>
             <p><strong>VlessForU</strong> — автоматический агрегатор конфигураций VLESS и Xray для тестирования сетей и защиты личных данных в публичных Wi-Fi.</p>
             
-            <a href="#configs" class="btn btn-cta">Подключиться</a>
+            <!-- Добавлен вызов функции вибрации при клике -->
+            <a href="#configs" class="btn btn-cta" onclick="triggerVibration(40)">Подключиться</a>
 
             <div class="card" style="margin-top: 2.5rem;">
                 <h3>Как это работает?</h3>
@@ -403,6 +404,14 @@
     </footer>
 
     <script>
+        // --- УТИЛИТА ДЛЯ ВИБРАЦИИ ---
+        function triggerVibration(pattern) {
+            // Проверяем поддержку браузером (работает на Android, игнорируется на iOS)
+            if ('vibrate' in navigator) {
+                navigator.vibrate(pattern);
+            }
+        }
+
         // Логика чекбокса принятия правил и анимации фона
         const checkbox = document.getElementById('accept-terms-cb');
         const subLink = document.getElementById('sub-link');
@@ -416,17 +425,17 @@
         checkbox.addEventListener('change', function() {
             const isAccepted = this.checked;
             
+            // Легкая тактильная отдача при нажатии на чекбокс
+            triggerVibration(40);
+            
             if (isAccepted) {
-                // Снимаем блюр со ссылки и запускаем анимированный фон
                 subLink.classList.add('revealed');
                 animatedBg.classList.add('active');
             } else {
-                // Возвращаем блюр и убираем фон
                 subLink.classList.remove('revealed');
                 animatedBg.classList.remove('active');
             }
 
-            // Активируем/блокируем кнопки
             btns.forEach(btn => {
                 btn.disabled = !isAccepted;
             });
@@ -438,6 +447,9 @@
 
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).then(() => {
+                // Двойная вибрация (успех)
+                triggerVibration([30, 50, 30]);
+
                 const btn = document.getElementById("copy-btn");
                 const originalText = btn.innerText;
                 
@@ -456,6 +468,9 @@
         // Функция добавления в приложение
         function addToApp(appName) {
             if (!checkbox.checked) return;
+
+            // Вибрация перед переходом в приложение
+            triggerVibration(50);
 
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).catch(e => {});
