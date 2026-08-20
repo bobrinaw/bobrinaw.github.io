@@ -2,181 +2,317 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VlessForU | Агрегатор конфигураций</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d1117;
-            --text-color: #c9d1d9;
-            --accent-color: #58a6ff;
-            --card-bg: #161b22;
-            --border-color: #30363d;
+            --bg-base: #09090b;
+            --bg-surface: #18181b;
+            --bg-card: rgba(39, 39, 42, 0.4);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            
+            --accent-primary: #3b82f6;
+            --accent-happ: #2563eb;
+            --accent-incy: #7c3aed;
+            --accent-success: #10b981;
+            
+            --glow: 0 0 40px rgba(59, 130, 246, 0.15);
+            --radius-lg: 16px;
+            --radius-md: 10px;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
+        html { scroll-behavior: smooth; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
             line-height: 1.6;
-            scroll-behavior: smooth;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        /* Фоновый блюр для красоты */
+        .bg-glow {
+            position: absolute;
+            top: -200px; left: 50%;
+            transform: translateX(-50%);
+            width: 800px; height: 400px;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Навигация */
         header {
-            background-color: var(--card-bg);
-            padding: 1rem 5%;
+            background-color: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
-            top: 0;
-            z-index: 100;
+            top: 0; z-index: 100;
+            padding: 1rem 5%;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo { 
-            font-size: 1.5rem; 
-            font-weight: bold; 
-            color: var(--accent-color); 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-decoration: none; 
+            letter-spacing: -0.5px;
         }
         
+        nav { display: flex; gap: 1.5rem; }
         nav a {
-            color: var(--text-color);
+            color: var(--text-muted);
             text-decoration: none;
-            margin-left: 1.5rem;
             font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-        
-        nav a:hover { color: var(--accent-color); }
-
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem 5%; }
-
-        section { margin-bottom: 4rem; padding-top: 2rem; }
-
-        h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #ffffff; }
-        h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #ffffff; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.5rem; color: #ffffff; }
-        
-        p { margin-bottom: 1rem; }
-        ul { margin-bottom: 1rem; padding-left: 1.5rem; }
-        li { margin-bottom: 0.5rem; }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        .btn {
-            display: inline-block;
-            color: #ffffff;
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            border-radius: 6px;
             font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            font-size: 1rem;
+            transition: color 0.3s;
         }
-        
-        .btn:active { transform: scale(0.98); }
+        nav a:hover { color: var(--text-main); }
 
-        .btn-primary { background-color: #238636; }
-        .btn-primary:hover { background-color: #2ea043; }
+        .container { max-width: 900px; margin: 0 auto; padding: 4rem 5%; }
 
-        .btn-happ { background-color: #1f6feb; }
-        .btn-happ:hover { background-color: #388bfd; }
+        section { margin-bottom: 5rem; scroll-margin-top: 100px; }
 
-        .btn-incy { background-color: #8957e5; }
-        .btn-incy:hover { background-color: #a371f7; }
+        h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; margin-bottom: 1rem; line-height: 1.2; letter-spacing: -1px; }
+        h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1.5rem; font-weight: 600; letter-spacing: -0.5px; }
+        h3 { font-size: 1.2rem; margin-bottom: 0.75rem; font-weight: 600; color: #fff; }
+        p { margin-bottom: 1.2rem; color: var(--text-muted); }
+        strong { color: var(--text-main); font-weight: 600; }
 
         .card {
-            background-color: var(--card-bg);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--glow);
+            backdrop-filter: blur(10px);
         }
 
+        /* Блок конфигураций и галочка */
+        .config-area {
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .link-wrapper {
+            background: #000;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sub-link {
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            color: var(--accent-primary);
+            transition: filter 0.4s ease, opacity 0.4s ease;
+            filter: blur(6px);
+            opacity: 0.5;
+            user-select: none;
+            display: block;
+        }
+
+        #sub-link.revealed {
+            filter: blur(0);
+            opacity: 1;
+            user-select: all;
+        }
+
+        .lock-message {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        
+        #sub-link.revealed + .lock-message { opacity: 0; }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(255,255,255,0.03);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .checkbox-container:hover { background: rgba(255,255,255,0.06); }
+
+        .checkbox-container input {
+            margin-top: 4px;
+            width: 18px; height: 18px;
+            accent-color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .checkbox-container span { font-size: 0.9rem; color: var(--text-muted); }
+        .checkbox-container a { color: var(--accent-primary); text-decoration: none; }
+        .checkbox-container a:hover { text-decoration: underline; }
+
+        /* Кнопки */
+        .btn-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+
+        .btn {
+            display: inline-flex; justify-content: center; align-items: center;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem; font-weight: 600;
+            border: none; cursor: pointer;
+            color: #fff;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.4; cursor: not-allowed; filter: grayscale(100%);
+        }
+
+        .btn:not(:disabled):active { transform: scale(0.98); }
+
+        .btn-primary { background: #27272a; border: 1px solid #3f3f46; color: var(--text-main); }
+        .btn-primary:not(:disabled):hover { background: #3f3f46; }
+        
+        .btn-primary.success { background: var(--accent-success); border-color: var(--accent-success); color: #fff; }
+
+        .btn-happ { background: var(--accent-happ); }
+        .btn-happ:not(:disabled):hover { background: #1d4ed8; box-shadow: 0 4px 20px rgba(37,99,235,0.4); }
+
+        .btn-incy { background: var(--accent-incy); }
+        .btn-incy:not(:disabled):hover { background: #6d28d9; box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
+
+        /* Юридические тексты */
         .legal-text {
             font-size: 0.85rem;
-            color: #8b949e;
-            background: #010409;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.3);
             padding: 1.5rem;
-            border-radius: 6px;
+            border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
-            height: 300px;
+            height: 250px;
             overflow-y: auto;
         }
 
+        .legal-text p { margin-bottom: 1rem; }
+        .legal-text p:last-child { margin-bottom: 0; }
+
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
         footer {
-            text-align: center;
-            padding: 2rem 5%;
+            text-align: center; padding: 2rem 5%;
             border-top: 1px solid var(--border-color);
-            color: #8b949e;
-            font-size: 0.9rem;
-            margin-top: 4rem;
+            color: var(--text-muted); font-size: 0.85rem;
         }
 
+        /* Анимация при скролле */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Мобильная адаптация */
         @media (max-width: 600px) {
-            header { flex-direction: column; gap: 1rem; }
-            nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
-            nav a { margin: 0 0.5rem; }
-            h1 { font-size: 2rem; }
-            .btn-group { flex-direction: column; }
-            .btn { width: 100%; text-align: center; }
+            .header-content { flex-direction: column; gap: 1rem; }
+            nav { width: 100%; justify-content: center; flex-wrap: wrap; gap: 1rem; }
+            .container { padding: 2rem 5%; }
+            h1 { font-size: 2.2rem; }
+            .card { padding: 1.5rem; }
+            .btn-group { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
+    <div class="bg-glow"></div>
+
     <header>
-        <a href="#" class="logo">VlessForU</a>
-        <nav>
-            <a href="#about">О сервисе</a>
-            <a href="#configs">Конфигурации</a>
-            <a href="#terms">Правила</a>
-            <a href="#offer">Оферта</a>
-        </nav>
+        <div class="header-content">
+            <a href="#" class="logo">VlessForU</a>
+            <nav>
+                <a href="#about">О сервисе</a>
+                <a href="#configs">Настройка</a>
+                <a href="#terms">Документы</a>
+            </nav>
+        </div>
     </header>
 
     <div class="container">
-        <!-- Секция: Главная -->
-        <section id="about">
-            <h1>Безопасность и маршрутизация сетей</h1>
-            <p><strong>VlessForU</strong> — это автоматический агрегатор конфигураций VLESS и Xray, собранных из открытых источников. Проект создан для тестирования сетей, защиты личных данных при использовании публичных Wi-Fi сетей и шифрования трафика.</p>
-            <div class="card">
+        
+        <section id="about" class="reveal">
+            <h1>Безопасная маршрутизация сетей</h1>
+            <p><strong>VlessForU</strong> — автоматический агрегатор конфигураций VLESS и Xray для тестирования сетей и защиты личных данных в публичных Wi-Fi.</p>
+            <div class="card" style="margin-top: 2rem;">
                 <h3>Как это работает?</h3>
-                <p>Наш алгоритм автоматически проверяет публичные узлы на доступность, измеряет скорость отклика и формирует готовые конфигурации для импорта в поддерживаемые клиенты (например, <strong>Happ</strong>, <strong>Incy</strong>, v2rayN, Nekobox).</p>
-                <p><em>Внимание: Сервис не является средством обхода установленных законом ограничений доступа к информации.</em></p>
+                <p>Наш алгоритм автоматически проверяет публичные узлы на доступность, измеряет скорость отклика и формирует готовые конфигурации для импорта в поддерживаемые клиенты (<strong>Happ</strong>, <strong>Incy</strong>, v2rayN, Nekobox).</p>
+                <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0;"><em>Внимание: Сервис не является средством обхода установленных законом ограничений доступа к информации.</em></p>
             </div>
         </section>
 
-        <!-- Секция: Конфигурации -->
-        <section id="configs">
+        <section id="configs" class="reveal">
             <h2>Получить конфигурации</h2>
-            <p>Вы можете нажать кнопку для автоматического добавления в приложение или скопировать ссылку на подписку (Subscription link) вручную. Список обновляется автоматически.</p>
+            <p>Чтобы получить доступ к ссылке на подписку (Subscription link) и кнопкам автоматического добавления, ознакомьтесь с правилами использования.</p>
             
-            <div class="card">
-                <h3>Ссылка для импорта:</h3>
-                <code id="sub-link" style="display:block; background:#010409; color: var(--text-color); padding:1rem; border-radius:6px; word-break: break-all; margin-bottom: 1rem;">https://sub.vlessfo.ru/vlessforu/working_configs.txt</code>
+            <div class="card config-area">
+                
+                <label class="checkbox-container">
+                    <input type="checkbox" id="accept-terms-cb">
+                    <span>Я прочитал(а) и принимаю <a href="#terms">Правила использования</a> и <a href="#offer">Публичную оферту</a>.</span>
+                </label>
+
+                <div class="link-wrapper">
+                    <span id="sub-link">https://sub.vlessfo.ru/vlessforu/working_configs.txt</span>
+                    <span class="lock-message">▲ Примите правила для доступа ▲</span>
+                </div>
                 
                 <div class="btn-group">
-                    <button onclick="copyToClipboard()" class="btn btn-primary" id="copy-btn">Скопировать ссылку</button>
-                    <button onclick="addToApp('Happ')" class="btn btn-happ">Добавить в Happ</button>
-                    <button onclick="addToApp('Incy')" class="btn btn-incy">Добавить в Incy</button>
+                    <button onclick="copyToClipboard()" class="btn btn-primary" id="copy-btn" disabled>
+                        Скопировать ссылку
+                    </button>
+                    <button onclick="addToApp('Happ')" class="btn btn-happ" id="happ-btn" disabled>
+                        Добавить в Happ
+                    </button>
+                    <button onclick="addToApp('Incy')" class="btn btn-incy" id="incy-btn" disabled>
+                        Добавить в Incy
+                    </button>
                 </div>
             </div>
         </section>
 
-        <!-- Секция: Правила использования -->
-        <section id="terms">
-            <h2>Правила использования (Terms of Use)</h2>
+        <section id="terms" class="reveal">
+            <h2>Правила использования</h2>
             <div class="legal-text">
                 <p><strong>1. Общие положения</strong><br>
                 1.1. Сервис VlessForU предоставляет пользователям доступ к автоматически агрегированным конфигурациям протоколов маршрутизации (VLESS/Xray).<br>
@@ -185,34 +321,32 @@
                 <p><strong>2. Ограничения и соблюдение законодательства</strong><br>
                 2.1. Сервис предназначен исключительно для обеспечения безопасности личных данных, защиты соединений в недоверенных сетях и технических тестов маршрутизации.<br>
                 2.2. Сервис <strong>не предназначен</strong> и <strong>не предоставляет услуг</strong> по обходу блокировок ресурсов, ограниченных в доступе на территории Российской Федерации и Республики Беларусь.<br>
-                2.3. Пользователь обязуется <strong>не использовать</strong> полученные конфигурации для доступа к информации, распространение которой запрещено в РФ (согласно Федеральному закону от 27.07.2006 № 149-ФЗ «Об информации, информационных технологиях и о защите информации») и РБ (в соответствии с законодательством Республики Беларусь о средствах массовой информации и защите информации).<br>
-                2.4. Вся ответственность за использование протоколов и передачу данных через сторонние серверы лежит исключительно на Пользователе.</p>
+                2.3. Пользователь обязуется <strong>не использовать</strong> полученные конфигурации для доступа к информации, распространение которой запрещено в РФ (согласно ФЗ от 27.07.2006 № 149-ФЗ) и РБ.<br>
+                2.4. Вся ответственность за использование протоколов лежит исключительно на Пользователе.</p>
 
                 <p><strong>3. Отказ от ответственности</strong><br>
-                3.1. VlessForU является поисковым алгоритмом. Администрация сервиса не владеет серверами, указанными в конфигурациях, не управляет ими и не хранит логи пользователей.<br>
+                3.1. VlessForU является поисковым алгоритмом. Администрация не владеет серверами и не хранит логи пользователей.<br>
                 3.2. Доступность узлов не гарантируется.</p>
             </div>
         </section>
 
-        <!-- Секция: Публичная оферта -->
-        <section id="offer">
+        <section id="offer" class="reveal">
             <h2>Публичная оферта</h2>
             <div class="legal-text">
                 <p><strong>1. Предмет оферты</strong><br>
-                1.1. Настоящая публичная оферта является официальным предложением проекта VlessForU (далее — «Исполнитель») заключить договор на безвозмездное предоставление справочной информации (ссылок на конфигурации) любому физическому лицу (далее — «Пользователь»).</p>
+                1.1. Настоящая публичная оферта является официальным предложением проекта VlessForU заключить договор на безвозмездное предоставление справочной информации (ссылок на конфигурации).</p>
 
                 <p><strong>2. Порядок акцепта</strong><br>
-                2.1. Акцептом (принятием) настоящей Оферты признается факт копирования ссылки на подписку или использования конфигураций сервиса.<br>
-                2.2. Оферта не требует подписания в бумажном виде и действительна в электронном виде.</p>
+                2.1. Акцептом (принятием) настоящей Оферты признается установка отметки согласия (галочки) и факт копирования ссылки на подписку.<br>
+                2.2. Оферта не требует подписания в бумажном виде.</p>
 
                 <p><strong>3. Условия предоставления информации</strong><br>
                 3.1. Информация предоставляется на условиях «как есть» (AS IS). Исполнитель не предоставляет никаких гарантий относительно бесперебойной работы сторонних узлов сети.<br>
                 3.2. Исполнитель не оказывает услуги связи, телематические услуги или услуги хостинга.</p>
 
                 <p><strong>4. Права и обязанности сторон</strong><br>
-                4.1. Пользователь обязуется использовать сервис в строгом соответствии с законодательством страны своего пребывания (включая, но не ограничиваясь, законодательством РФ и РБ).<br>
-                4.2. Пользователь самостоятельно несет ответственность за соблюдение ограничений, наложенных государственными регуляторами (Роскомнадзор, БелГИЭ и др.).<br>
-                4.3. Исполнитель вправе в любой момент прекратить работу сервиса без предварительного уведомления.</p>
+                4.1. Пользователь обязуется использовать сервис в строгом соответствии с законодательством страны своего пребывания.<br>
+                4.2. Исполнитель вправе в любой момент прекратить работу сервиса без уведомления.</p>
             </div>
         </section>
     </div>
@@ -222,28 +356,59 @@
     </footer>
 
     <script>
+        // Логика чекбокса принятия правил
+        const checkbox = document.getElementById('accept-terms-cb');
+        const subLink = document.getElementById('sub-link');
+        const btns = [
+            document.getElementById('copy-btn'),
+            document.getElementById('happ-btn'),
+            document.getElementById('incy-btn')
+        ];
+
+        checkbox.addEventListener('change', function() {
+            const isAccepted = this.checked;
+            
+            // Снимаем/вешаем блюр со ссылки
+            if (isAccepted) {
+                subLink.classList.add('revealed');
+            } else {
+                subLink.classList.remove('revealed');
+            }
+
+            // Активируем/блокируем кнопки
+            btns.forEach(btn => {
+                btn.disabled = !isAccepted;
+            });
+        });
+
+        // Функция копирования
         function copyToClipboard() {
+            if (!checkbox.checked) return; // Защита от вызова через консоль
+
             const linkText = document.getElementById("sub-link").innerText;
             navigator.clipboard.writeText(linkText).then(() => {
                 const btn = document.getElementById("copy-btn");
-                btn.innerText = "Скопировано!";
-                btn.style.backgroundColor = "#2ea043";
+                const originalText = btn.innerText;
+                
+                btn.innerText = "✓ Скопировано";
+                btn.classList.add("success");
+                
                 setTimeout(() => {
-                    btn.innerText = "Скопировать ссылку";
-                    btn.style.backgroundColor = "#238636";
+                    btn.innerText = originalText;
+                    btn.classList.remove("success");
                 }, 2000);
             }).catch(err => {
                 console.error('Ошибка при копировании: ', err);
             });
         }
 
+        // Функция добавления в приложение
         function addToApp(appName) {
+            if (!checkbox.checked) return;
+
             const linkText = document.getElementById("sub-link").innerText;
+            navigator.clipboard.writeText(linkText).catch(e => {}); // Тихий бэкап в буфер
             
-            // Тихо копируем ссылку в буфер на случай, если приложение не установлено
-            navigator.clipboard.writeText(linkText).catch(err => console.error('Clipboard error:', err));
-            
-            // Формируем URL для открытия приложения согласно переданным схемам
             let appSchemeUrl = "";
             if (appName === 'Happ') {
                 appSchemeUrl = `happ://add/${linkText}`;
@@ -251,11 +416,27 @@
                 appSchemeUrl = `incy://add/${linkText}`;
             }
 
-            // Пытаемся открыть приложение (если установлено, ОС перехватит этот запрос)
             if (appSchemeUrl) {
                 window.location.href = appSchemeUrl;
             }
         }
+
+        // Анимация появления элементов при скролле (Scroll Reveal)
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const windowHeight = window.innerHeight;
+            const elementVisible = 100;
+
+            reveals.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal(); // Запуск при загрузке страницы
     </script>
 </body>
 </html>
